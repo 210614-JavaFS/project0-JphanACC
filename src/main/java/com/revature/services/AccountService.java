@@ -844,7 +844,7 @@ public class AccountService {
 				
 				int userCheckingSelect = Integer.parseInt(scan.nextLine());
 				
-				if (userCheckingSelect > checkingAccountIDs.size()) {
+				if (userCheckingSelect >= checkingAccountIDs.size()) {
 					System.out.println("You entered invalid value. Try again.");
 					log.warn("User entered a number more than Checking account's size");
 					approveAccount(account);
@@ -877,7 +877,7 @@ public class AccountService {
 				
 				int userSavingsSelect = Integer.parseInt(scan.nextLine());
 				
-				if (userSavingsSelect > savingsAccountIDs.size()) {
+				if (userSavingsSelect >= savingsAccountIDs.size()) {
 					System.out.println("You entered invalid value. Try again.");
 					log.warn("User entered a number more than Savings account's size");
 					approveAccount(account);
@@ -928,7 +928,7 @@ public class AccountService {
 				
 				int userCheckingSelect = Integer.parseInt(scan.nextLine());
 		
-				if (userCheckingSelect > checkingAccountIDs.size()) {
+				if (userCheckingSelect >= checkingAccountIDs.size()) {
 					System.out.println("You entered invalid value. Try again.");
 					log.warn("User entered a number more than Checking account's size");
 					cancelAccount(account);
@@ -962,7 +962,7 @@ public class AccountService {
 				
 				int userSavingsSelect = Integer.parseInt(scan.nextLine());
 				
-				if (userSavingsSelect > savingsAccountIDs.size()) {
+				if (userSavingsSelect >= savingsAccountIDs.size()) {
 					System.out.println("You entered invalid value. Try again.");
 					log.warn("User entered a number more than Savings account's size");
 					cancelAccount(account);
