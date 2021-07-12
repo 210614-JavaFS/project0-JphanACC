@@ -45,4 +45,14 @@ public class AccountEmployee extends Account {
 	public void addSavingsAccount(Savings savingsObj) {
 		this.savingsAccounts.add(savingsObj);
 	}
+	
+	//get Checking 
+	public Checking getCheckingAccount(int index) {
+		return checkingAccounts.get(index);
+	}
+
+	//get Savings
+	public Savings getSavingsAccount(int index) {
+		return savingsAccounts.get(index);
+	}
 }

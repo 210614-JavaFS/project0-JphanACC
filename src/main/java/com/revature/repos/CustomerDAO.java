@@ -27,8 +27,5 @@ public interface CustomerDAO {
 	public boolean transferCheckingToChecking(Checking checking, Checking checking2, double amount);
 	public boolean transferSavingsToSavings(Savings savings, Savings savings2, double amount);
 	
-//	public boolean depositChecking(AccountCustomer customer, int amount);
-//	public boolean withdrawSavings(AccountCustomer customer, int amount);
-//	public boolean depositSavings(AccountCustomer customer, int amount);
 }
 

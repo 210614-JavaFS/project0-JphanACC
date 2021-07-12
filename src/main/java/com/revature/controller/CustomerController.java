@@ -12,13 +12,13 @@ import jdk.internal.org.jline.utils.Log;
 public class CustomerController {
 	public static CustomerService customerService = new CustomerService();
 	
-	public void showAllCustomers() {
-		System.out.println("Show all customers");
+	public List<AccountCustomer> showAllCustomers() {
 		List<AccountCustomer> customers = customerService.showAllCustomers();
 		
-		for (AccountCustomer c:customers) {
-			System.out.println(c);
-		}
+//		for (AccountCustomer c:customers) {
+//			System.out.println(c);
+//		}
+		return customers;
 	}
 	
 	public boolean validateCustomer(String username, String password) {

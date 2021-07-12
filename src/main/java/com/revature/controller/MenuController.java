@@ -11,13 +11,17 @@ public class MenuController {
 	private static Logger log = LoggerFactory.getLogger(MenuController.class);
 	
 	private static CustomerController customerController = new CustomerController();
+	private static EmployeeController employeeController = new EmployeeController();
+	private static AdminController adminController = new AdminController();
 	
 	private static AccountPageController accountPageController = new AccountPageController();
+	private static EmployeePageController employeePageController = new EmployeePageController();
+	private static AdminPageController adminPageController = new AdminPageController();
 //	private UserService userService = new UserService();
 	
 	public void validateUser() {
 		//SHOWS ALL CUSTOMERS
-		customerController.showAllCustomers();
+		
 		System.out.println("== Starter Menu ==");
 		System.out.println("Are you a returning user?");
 		System.out.println("Please answer yes or no");
@@ -56,9 +60,19 @@ public class MenuController {
 				this.login();
 			}
 		} else if (tableName.equals("employees")) {
-			System.out.println("Not yet implemented");
+			if(employeeController.validateEmployee(usernameInput, passwordInput)) {
+				System.out.println("Employee Login is successful!");
+				employeePageController.showEmployeePage(employeeController.findEmployee(usernameInput, passwordInput));
+			} else {
+				this.login();
+			}
 		} else if (tableName.equals("admin")) {
-			System.out.println("Not yet implemented");
+			if(adminController.validateAdmin(usernameInput, passwordInput)) {
+				System.out.println("Admin Login is successful!");
+				adminPageController.showAdminPage(adminController.findAdmin(usernameInput, passwordInput));
+			} else {
+				this.login();
+			}
 		}
 	}
 	
@@ -120,7 +134,7 @@ public class MenuController {
 		if (tableName.equals("customers")) {
 			customerController.addCustomer(usernameInput, passwordInput, firstNameInput, lastNameInput);
 		} else if (tableName.equals("employees")) {
-			System.out.println("Not yet implemented");
+			employeeController.addEmployee(usernameInput, passwordInput, firstNameInput, lastNameInput);
 		}
 		
 		//back to login screen

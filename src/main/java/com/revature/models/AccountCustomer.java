@@ -44,5 +44,26 @@ public class AccountCustomer extends Account {
 	public void addSavingsAccount(Savings savingsObj) {
 		this.savingsAccounts.add(savingsObj);
 	}
+	
+	//get Checking 
+	public Checking getCheckingAccount(int index) {
+		return checkingAccounts.get(index);
+	}
 
+	//get Savings
+	public Savings getSavingsAccount(int index) {
+		return savingsAccounts.get(index);
+	}
+	
+	//select specific Checking based on ID
+	/*
+	public Checking selectChecking(int index) {
+		for (int i = 0; i < checkingAccounts.size(); i++) {
+			if (checkingAccounts.get(i).getCheckingAccountID() == index) {
+				return checkingAccounts.get(i);
+			} else {
+				return null;
+			}
+		}
+	}*/
 }
