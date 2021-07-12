@@ -1,0 +1,69 @@
+package com.revature.models;
+
+import java.util.ArrayList;
+
+public class AccountCustomer extends Account {
+	
+	private ArrayList<Checking> checkingAccounts = new ArrayList<Checking>();
+	private ArrayList<Savings> savingsAccounts = new ArrayList<Savings>();
+	
+	public AccountCustomer() {
+		super();
+	}
+	
+	//add customer
+	public AccountCustomer(String username,String password,String firstName, String lastName) {
+		super();
+		this.setUsername(username);
+		this.setPassword(password);
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
+	}
+	public ArrayList<Checking> getCheckingAccounts() {
+		return checkingAccounts;
+	}
+
+	public void setCheckingAccounts(ArrayList<Checking> checkingAccounts) {
+		this.checkingAccounts = checkingAccounts;
+	}
+
+	public ArrayList<Savings> getSavingsAccounts() {
+		return savingsAccounts;
+	}
+
+	public void setSavingsAccounts(ArrayList<Savings> savingsAccounts) {
+		this.savingsAccounts = savingsAccounts;
+	}
+	
+	//add Checking account
+	public void addCheckingAccount(Checking checkingObj) {
+		this.checkingAccounts.add(checkingObj);
+	}
+	
+	//add Savings account
+	public void addSavingsAccount(Savings savingsObj) {
+		this.savingsAccounts.add(savingsObj);
+	}
+	
+	//get Checking 
+	public Checking getCheckingAccount(int index) {
+		return checkingAccounts.get(index);
+	}
+
+	//get Savings
+	public Savings getSavingsAccount(int index) {
+		return savingsAccounts.get(index);
+	}
+	
+	//select specific Checking based on ID
+	/*
+	public Checking selectChecking(int index) {
+		for (int i = 0; i < checkingAccounts.size(); i++) {
+			if (checkingAccounts.get(i).getCheckingAccountID() == index) {
+				return checkingAccounts.get(i);
+			} else {
+				return null;
+			}
+		}
+	}*/
+}
