@@ -25,4 +25,10 @@ public interface EmployeeDAO {
 
 	public boolean deleteChecking(int accountID);
 	public boolean deleteSavings(int accountID);
+	
+	public boolean transferCheckingToSavings(int checkingID, int savingsID, double amount);
+	public boolean transferSavingsToChecking(int checkingID, int savingsID, double amount);
+	
+	public boolean transferCheckingToChecking(int checkingID, int checking2ID, double amount);
+	public boolean transferSavingsToSavings(int savingsID, int savings2ID, double amount);
 }
