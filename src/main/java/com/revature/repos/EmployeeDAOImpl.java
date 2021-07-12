@@ -40,6 +40,43 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 				
 				list.add(employee);
 				
+				//Retrieve all Checking and add to employee's list
+				String sqlChecking = "SELECT * FROM employees INNER JOIN checking_balances ON (employees.account_id = checking_balances.employee_id) WHERE employees.account_id = ?";
+				PreparedStatement statementChecking = conn.prepareStatement(sqlChecking);
+				
+				statementChecking.setInt(1, employee.getAccountID());
+				ResultSet resultChecking = statementChecking.executeQuery();
+				
+				while (resultChecking.next()) {
+
+					Checking checkingAccount = new Checking();
+					
+					checkingAccount.setCheckingAccountID(resultChecking.getInt("checking_account_id"));
+					checkingAccount.setCheckingBalance(resultChecking.getDouble("checking_balance"));
+					checkingAccount.setCheckingAccountStatus(resultChecking.getBoolean("checking_account_status"));
+					
+					employee.addCheckingAccount(checkingAccount);
+				}
+				
+				//Retrieve all Savings and add to employyes's list
+				String sqlSavings = "SELECT * FROM employees INNER JOIN savings_balances ON (employees.account_id = savings_balances.employee_id) WHERE employees.account_id = ?";
+				PreparedStatement statementSavings = conn.prepareStatement(sqlSavings);
+				
+				statementSavings.setInt(1, employee.getAccountID());
+				ResultSet resultSavings = statementSavings.executeQuery();
+				
+				while (resultSavings.next()) {
+					
+					
+					Savings savingsAccount = new Savings();
+					
+					savingsAccount.setSavingsAccountID(resultSavings.getInt("savings_account_id"));
+					savingsAccount.setSavingsBalance(resultSavings.getDouble("savings_balance"));
+					savingsAccount.setSavingsAccountStatus(resultSavings.getBoolean("savings_account_status"));
+					
+					employee.addSavingsAccount(savingsAccount);
+				}
+				
 			}
 			return list;
 			

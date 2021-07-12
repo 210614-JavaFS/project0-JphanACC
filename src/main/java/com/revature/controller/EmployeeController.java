@@ -20,13 +20,10 @@ public class EmployeeController {
 	public static CustomerService customerService = new CustomerService();
 	public static EmployeeService employeeService = new EmployeeService();
 		
-	public void showAllCustomers() {
-		System.out.println("Show all customers");
+	public List<AccountEmployee> showAllEmployees() {
 		List<AccountEmployee> employees = employeeService.showAllEmployee();
 			
-		for (AccountEmployee e:employees) {
-		System.out.println(e);
-		}
+		return employees;
 	}
 		
 	public boolean validateEmployee(String username, String password) {

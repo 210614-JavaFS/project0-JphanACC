@@ -12,6 +12,7 @@ import com.revature.controller.CustomerController;
 import com.revature.controller.EmployeeController;
 import com.revature.controller.EmployeePageController;
 import com.revature.controller.MenuController;
+import com.revature.models.AccountAdmin;
 import com.revature.models.AccountCustomer;
 import com.revature.models.AccountEmployee;
 
@@ -815,13 +816,14 @@ public class AccountService {
 	}
 
 	//Approve Accounts
-	//Employee
-	public static void approveAccount(AccountEmployee account) {
+	//Admin
+	public static void approveAccount(AccountAdmin account) {
 		System.out.println("--- 4. Approve Accounts Menu ----");
 		System.out.println("Select what type of accounts to approved");
 		System.out.println("1. Checkings \n2. Savings");
 		
 		List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
+		List<AccountEmployee> allEmployeeList = employeeController.showAllEmployees();
 		String choice = scan.nextLine();
 		
 		switch (choice) {
@@ -834,12 +836,34 @@ public class AccountService {
 				for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
 					for (int customerCheckingIndex = 0; customerCheckingIndex < allCustomerList.get(customerListIndex).getCheckingAccounts().size(); customerCheckingIndex++) {
 						if (allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).isCheckingAccountStatus() == false) {
-							System.out.println("Pick ++> " + numberOfCheckingAccounts + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
+							System.out.println("Pick ++> " + numberOfCheckingAccounts + " <++ Employee's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
 									+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
 							numberOfCheckingAccounts++;
 							checkingAccountIDs.add(allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
 						}
 					}
+				}
+				//List of unapproved Employee Checkings
+				System.out.println("+++++++++++++ List of unapproved Employee Checkings ++++++++++++");
+				try {
+					for (int employeeListIndex = 0; employeeListIndex < allEmployeeList.size(); employeeListIndex ++) {
+						
+						for (int employeeCheckingIndex = 0; employeeCheckingIndex < allEmployeeList.get(employeeListIndex).getCheckingAccounts().size(); employeeCheckingIndex++) {
+							
+							if (allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).isCheckingAccountStatus() == false) {
+								
+								System.out.println("Pick ++> " + numberOfCheckingAccounts + " <++ Employee's username "+ allEmployeeList.get(employeeListIndex).getUsername() + " with Checking account ID "
+										+ allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID());
+						
+								numberOfCheckingAccounts++;
+
+								checkingAccountIDs.add(allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID());
+							}
+						}
+					}	
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.debug("Unable to retrieve employee's list");
 				}
 				
 				int userCheckingSelect = Integer.parseInt(scan.nextLine());
@@ -874,6 +898,23 @@ public class AccountService {
 						}
 					}
 				}
+				//List of unapproved Employee Savings
+				try {
+					System.out.println("+++++++++++++ List of unapproved Employee Savings ++++++++++++");
+					for (int employeeListIndex = 0; employeeListIndex < allEmployeeList.size(); employeeListIndex ++) {
+						for (int employeeSavingsIndex = 0; employeeSavingsIndex < allEmployeeList.get(employeeListIndex).getSavingsAccounts().size(); employeeSavingsIndex++) {
+							if (allEmployeeList.get(employeeListIndex).getSavingsAccount(employeeSavingsIndex).isSavingsAccountStatus() == false) {
+								System.out.println("Pick ++> " + numberOfSavingsAccounts + " <++ Employee's username "+ allEmployeeList.get(employeeListIndex).getUsername() + " with Savings account ID "
+										+ allEmployeeList.get(employeeListIndex).getSavingsAccount(employeeSavingsIndex).getSavingsAccountID());
+								numberOfSavingsAccounts++;
+								savingsAccountIDs.add(allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeSavingsIndex).getCheckingAccountID());
+							}
+						}
+					}		
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.debug("Unable to retrieve employee's list");
+				}
 				
 				int userSavingsSelect = Integer.parseInt(scan.nextLine());
 				
@@ -895,8 +936,90 @@ public class AccountService {
 				System.out.println("You've entered invalid value, please try again");
 				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));					
 		}
-
 	}
+
+	//Employee
+	public static void approveAccount(AccountEmployee account) {
+			System.out.println("--- 4. Approve Accounts Menu ----");
+			System.out.println("Select what type of accounts to approved");
+			System.out.println("1. Checkings \n2. Savings");
+			
+			List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
+			String choice = scan.nextLine();
+			
+			switch (choice) {
+				case "1":
+					int numberOfCheckingAccounts = 0;
+					List<Integer> checkingAccountIDs = new ArrayList<Integer>();
+					
+					//List of unapproved Customer Checkings
+					System.out.println("+++++++++++++ List of unapproved Customer Checkings ++++++++++++");
+					for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+						for (int customerCheckingIndex = 0; customerCheckingIndex < allCustomerList.get(customerListIndex).getCheckingAccounts().size(); customerCheckingIndex++) {
+							if (allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).isCheckingAccountStatus() == false) {
+								System.out.println("Pick ++> " + numberOfCheckingAccounts + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
+										+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
+								numberOfCheckingAccounts++;
+								checkingAccountIDs.add(allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
+							}
+						}
+					}
+					
+					int userCheckingSelect = Integer.parseInt(scan.nextLine());
+					
+					if (userCheckingSelect >= checkingAccountIDs.size()) {
+						System.out.println("You entered invalid value. Try again.");
+						log.warn("User entered a number more than Checking account's size");
+						approveAccount(account);
+					} else if (userCheckingSelect < 0) {
+						System.out.println("You entered invalid value. Try again.");
+						log.warn("User entered negative number");
+						approveAccount(account);
+					} else {
+						int selectedID = checkingAccountIDs.get(userCheckingSelect);
+						employeeController.approveChecking(selectedID);
+						approveAccount(account);
+					}
+					
+				case "2":
+					int numberOfSavingsAccounts = 0;
+					List<Integer> savingsAccountIDs = new ArrayList<Integer>();
+					
+					//List of unapproved Customer Savings
+					System.out.println("+++++++++++++ List of unapproved Customer Savings ++++++++++++");
+					for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+						for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList.get(customerListIndex).getSavingsAccounts().size(); customerSavingsIndex++) {
+							if (allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).isSavingsAccountStatus() == false) {
+								System.out.println("Pick ++> " + numberOfSavingsAccounts + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Savings account ID "
+										+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID());
+								numberOfSavingsAccounts++;
+								savingsAccountIDs.add(allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID());
+							}
+						}
+					}
+					
+					int userSavingsSelect = Integer.parseInt(scan.nextLine());
+					
+					if (userSavingsSelect >= savingsAccountIDs.size()) {
+						System.out.println("You entered invalid value. Try again.");
+						log.warn("User entered a number more than Savings account's size");
+						approveAccount(account);
+					} else if (userSavingsSelect < 0) {
+						System.out.println("You entered invalid value. Try again.");
+						log.warn("User entered negative number");
+						approveAccount(account);
+					} else {
+						int selectedID = savingsAccountIDs.get(userSavingsSelect);					
+						employeeController.approveSavings(selectedID);
+						approveAccount(account);	
+					}
+					
+				default:
+					System.out.println("You've entered invalid value, please try again");
+					employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));					
+			}
+
+		}
 
 	//Deny Accounts
 	//Employee
@@ -978,8 +1101,130 @@ public class AccountService {
 				
 			default:
 				System.out.println("You've entered invalid value, please try again");
-				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));					
+				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
 		}
 
 	}
+
+	//Admin
+	public static void cancelAccount(AccountAdmin account) {
+		System.out.println("--- 4. Cancelling Accounts Menu ----");
+		System.out.println("Select what type of accounts to cancel");
+		System.out.println("1. Checkings \n2. Savings");
+		
+		List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
+		List<AccountEmployee> allEmployeeList = employeeController.showAllEmployees();
+		
+		String choice = scan.nextLine();
+		
+		switch (choice) {
+			case "1":
+				int numberOfCheckingAccounts = 0;
+				List<Integer> checkingAccountIDs = new ArrayList<Integer>();
+				
+				//List of Customer Checkings
+				System.out.println("+++++++++++++ List of All Customer Checkings ++++++++++++");
+				for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+					for (int customerCheckingIndex = 0; customerCheckingIndex < allCustomerList.get(customerListIndex).getCheckingAccounts().size(); customerCheckingIndex++) {
+						System.out.println("Pick ++> " + numberOfCheckingAccounts + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
+								+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID() 
+								+ ". Status: " + allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).isCheckingAccountStatus());
+						numberOfCheckingAccounts++;
+						checkingAccountIDs.add(allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
+						
+					}
+				}
+				System.out.println("+++++++++++++ List of All Employee Checkings ++++++++++++");
+				try {
+					for (int employeeListIndex = 0; employeeListIndex < allEmployeeList.size(); employeeListIndex ++) {
+						
+						for (int employeeCheckingIndex = 0; employeeCheckingIndex < allEmployeeList.get(employeeListIndex).getCheckingAccounts().size(); employeeCheckingIndex++) {	
+							System.out.println("Pick ++> " + numberOfCheckingAccounts + " <++ Employee's username "+ allEmployeeList.get(employeeListIndex).getUsername() + " with Checking account ID "
+									+ allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID()
+									+ ". Status: " + allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).isCheckingAccountStatus()
+									);
+					
+							numberOfCheckingAccounts++;
+							checkingAccountIDs.add(allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID());
+							
+						}
+					}	
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.debug("Unable to retrieve employee's list");
+				}
+				
+				int userCheckingSelect = Integer.parseInt(scan.nextLine());
+		
+				if (userCheckingSelect >= checkingAccountIDs.size()) {
+					System.out.println("You entered invalid value. Try again.");
+					log.warn("User entered a number more than Checking account's size");
+					cancelAccount(account);
+				} else if (userCheckingSelect < 0) {
+					System.out.println("You entered invalid value. Try again.");
+					log.warn("User entered negative number");
+					cancelAccount(account);
+				} else {
+					int selectedID = checkingAccountIDs.get(userCheckingSelect);
+					employeeController.deleteChecking(selectedID);
+					cancelAccount(account);
+				}
+				
+			case "2":
+				int numberOfSavingsAccounts = 0;
+				List<Integer> savingsAccountIDs = new ArrayList<Integer>();
+				
+				//List of Customer Savings
+				System.out.println("+++++++++++++ List of All Customer Savings ++++++++++++");
+				for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+					for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList.get(customerListIndex).getSavingsAccounts().size(); customerSavingsIndex++) {
+						
+						System.out.println("Pick ++> " + numberOfSavingsAccounts + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Savings account ID "
+								+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID()
+								+ ". Status: " + allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).isSavingsAccountStatus());
+						numberOfSavingsAccounts++;
+						savingsAccountIDs.add(allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID());
+						
+					}
+				}
+				try {
+					System.out.println("+++++++++++++ List of All Employee Savings ++++++++++++");
+					for (int employeeListIndex = 0; employeeListIndex < allEmployeeList.size(); employeeListIndex ++) {
+						for (int employeeSavingsIndex = 0; employeeSavingsIndex < allEmployeeList.get(employeeListIndex).getSavingsAccounts().size(); employeeSavingsIndex++) {
+							System.out.println("Pick ++> " + numberOfSavingsAccounts + " <++ Employee's username "+ allEmployeeList.get(employeeListIndex).getUsername() + " with Savings account ID "
+										+ allEmployeeList.get(employeeListIndex).getSavingsAccount(employeeSavingsIndex).getSavingsAccountID()
+										+ ". Status: " + allEmployeeList.get(employeeListIndex).getSavingsAccount(employeeSavingsIndex).isSavingsAccountStatus()
+									);
+								numberOfSavingsAccounts++;
+								savingsAccountIDs.add(allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeSavingsIndex).getCheckingAccountID());
+						}
+					}		
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.debug("Unable to retrieve employee's list");
+				}
+				
+				int userSavingsSelect = Integer.parseInt(scan.nextLine());
+				
+				if (userSavingsSelect >= savingsAccountIDs.size()) {
+					System.out.println("You entered invalid value. Try again.");
+					log.warn("User entered a number more than Savings account's size");
+					cancelAccount(account);
+				} else if (userSavingsSelect < 0) {
+					System.out.println("You entered invalid value. Try again.");
+					log.warn("User entered negative number");
+					cancelAccount(account);
+				} else {
+					int selectedID = savingsAccountIDs.get(userSavingsSelect);					
+					employeeController.deleteSavings(selectedID);
+					cancelAccount(account);
+				}
+				
+			default:
+				System.out.println("You've entered invalid value, please try again");
+				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
+		}
+
+	}
+
 }

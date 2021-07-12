@@ -33,10 +33,10 @@ public class AdminPageController {
 		
 		switch(choice) {
 			case "1":
-//				AccountService.approveAccount(account);
+				AccountService.approveAccount(account);
 				break;
 			case "2":
-//				AccountService.cancelAccount(account);
+				AccountService.cancelAccount(account);
 				break;
 			case "3":
 //				AccountService.transferFund(account);
