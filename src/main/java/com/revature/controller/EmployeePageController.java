@@ -72,7 +72,7 @@ public class EmployeePageController {
 				AccountService.editBalance(account);
 				break;
 			case "3":
-//				AccountService.transferFund(account);
+				AccountService.transferFund(account);
 				break;
 			case "4":
 				AccountService.approveAccount(account);

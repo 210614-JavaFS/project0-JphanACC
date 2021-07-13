@@ -198,4 +198,57 @@ public class EmployeeController {
 		}
 	}
 	
+	//Checking -> Savings
+	public void transferCheckingToSavings(int checkingID, int savingsID, double amount) {
+		System.out.println("Sending request...");
+		if (employeeService.transferCheckingToSavings(checkingID, savingsID, amount)) {
+			System.out.println("Sending request completed...");
+		} else {
+			log.warn("Transfer Checking to Savings did not complete");
+			System.out.println("Something went wrong, try again...");
+		}
+	}
+	
+	//Savings -> Checking
+	public void transferSavingsToChecking(int checkingID, int savingsID, double amount) {
+		System.out.println("Sending request...");
+		if (employeeService.transferSavingsToChecking(checkingID, savingsID, amount)) {
+			System.out.println("Sending request completed...");
+		} else {
+			log.warn("Transfer Savings to Savings did not complete");
+			System.out.println("Something went wrong, try again...");
+		}
+	}
+	
+	//Checking -> Checking
+	public void transferCheckingToChecking(int checkingID, int checkingID2, double amount) {
+		System.out.println("Sending request...");
+		
+		if (checkingID == checkingID2) {
+			System.out.println("Hold on, ou can't select the same Checking account number!");
+			System.out.println("Request did not complete");
+			log.warn("User attempted to send to same Checking account number");
+		} else if (employeeService.transferCheckingToChecking(checkingID, checkingID2, amount)) {
+			System.out.println("Sending request completed...");
+		} else {
+			log.warn("Transfer Checking to Checking did not complete");
+			System.out.println("Something went wrong, try again...");
+		}
+	}
+	
+	//Savings -> Savings
+	public void transferSavingsToSavings(int savingsID, int savings2ID, double amount) {
+		System.out.println("Sending request...");
+		
+		if (savingsID == savings2ID) {
+			System.out.println("Hold on, ou can't select the same Savings account number!");
+			System.out.println("Request did not complete");
+			log.warn("User attempted to send to same Savings account number");
+		} else if (employeeService.transferSavingsToSavings(savingsID, savings2ID, amount)) {
+			System.out.println("Sending request completed...");
+		} else {
+			log.warn("Transfer Savings to Savings did not complete");
+			System.out.println("Something went wrong, try again...");
+		}
+	}
 }

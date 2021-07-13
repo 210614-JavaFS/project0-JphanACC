@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.revature.controller.AccountPageController;
+import com.revature.controller.AdminController;
+import com.revature.controller.AdminPageController;
 import com.revature.controller.CustomerController;
 import com.revature.controller.EmployeeController;
 import com.revature.controller.EmployeePageController;
@@ -22,9 +24,11 @@ public class AccountService {
 	
 	private static AccountPageController accountPageController = new AccountPageController();
 	private static EmployeePageController employeePageController = new EmployeePageController();
+	private static AdminPageController adminPageController = new AdminPageController();
 	
 	private static EmployeeController employeeController = new EmployeeController();
 	private static CustomerController customerController = new CustomerController();
+	private static AdminController adminController = new AdminController();
 	
 	private static MenuController menuController = new MenuController();
 	
@@ -75,7 +79,7 @@ public class AccountService {
 	//Customer
 	public static void editBalance(AccountCustomer customer) {
 		System.out.println("--- 2. Withdraw/Deposit Menu ----");
-		System.out.println("1. Checkings \n2. Savings");
+		System.out.println("1. Checkings \n2. Savings \n3. Go back to Customer's Main Menu");
 		String choice = scan.nextLine();
 		switch (choice) {
 	
@@ -129,6 +133,7 @@ public class AccountService {
 									} else {
 										System.out.println("You can't overwithdraw the balance. Your Checking balance isn't enough.");
 										log.warn("User attempted to overwithdraw the balance.");
+										editBalance(customer);
 									}
 								case "2":
 									System.out.println("Please enter how much you want to deposit: ");
@@ -204,7 +209,7 @@ public class AccountService {
 									} else {
 										System.out.println("You can't overwithdraw the balance. Your Savings balance isn't enough.");
 										log.warn("User attempted to overwithdraw the balance.");
-										
+										editBalance(customer);
 									}
 								case "2":
 									System.out.println("Please enter how much you want to deposit: ");
@@ -229,16 +234,20 @@ public class AccountService {
 						editBalance(customer);
 					}
 				}
+			case "3":	
+				System.out.println("Going back to previous menu...");
+				accountPageController.showAccountCustomerPage(customerController.findCustomer(customer.getUsername(), customer.getPassword()));
+				
 			default:
 				System.out.println("You've entered invalid value, please try again");
-				accountPageController.showAccountCustomerPage(customerController.findCustomer(customer.getUsername(), customer.getPassword()));
+				editBalance(customer);
 		}
 	}
 
 	//Employee
 	public static void editBalance(AccountEmployee employee) {
 		System.out.println("--- 2. Withdraw/Deposit Menu ----");
-		System.out.println("1. Checkings \n2. Savings");
+		System.out.println("1. Checkings \n2. Savings \n3. Go back to Employee's Main Menu");
 		String choice = scan.nextLine();
 		switch (choice) {
 	
@@ -291,6 +300,7 @@ public class AccountService {
 									} else {
 										System.out.println("You can't overwithdraw the balance. Your Checking balance isn't enough.");
 										log.warn("User attempted to overwithdraw the balance.");
+										editBalance(employee);
 									}
 								case "2":
 									System.out.println("Please enter how much you want to deposit: ");
@@ -367,6 +377,7 @@ public class AccountService {
 									} else {
 										System.out.println("You can't overwithdraw the balance. Your Savings balance isn't enough.");
 										log.warn("User attempted to overwithdraw the balance.");
+										editBalance(employee);
 									}
 								case "2":
 									System.out.println("Please enter how much you want to deposit: ");
@@ -391,9 +402,12 @@ public class AccountService {
 						editBalance(employee);
 					}
 				}
+			case "3":
+				System.out.println("Going back to previous menu...");
+				employeePageController.showEmployeePage(employeeController.findEmployee(employee.getUsername(), employee.getPassword()));
 			default:
 				System.out.println("You've entered invalid value, please try again");
-				employeePageController.showEmployeePage(employeeController.findEmployee(employee.getUsername(), employee.getPassword()));
+				editBalance(employee);
 		}
 	}
 	
@@ -402,7 +416,7 @@ public class AccountService {
 	public static void transferFund(AccountCustomer customer) {
 		System.out.println("--- 3. Transfer Funds Menu ----");
 		System.out.println("Select what type of accounts to transfer");
-		System.out.println("1. Checkings \n2. Savings");
+		System.out.println("1. Checkings \n2. Savings \n3. Go back to Customer's Main Menu");
 		String choice = scan.nextLine();
 		switch (choice) {
 			//From Checking
@@ -660,10 +674,13 @@ public class AccountService {
 						transferFund(customer);
 					}
 				}
+			case "3":
+				System.out.println("Going back to previous menu...");
+				accountPageController.showAccountCustomerPage(customerController.findCustomer(customer.getUsername(), customer.getPassword()));
 				
 			default:
 				System.out.println("You've entered invalid value, please try again");
-				accountPageController.showAccountCustomerPage(customerController.findCustomer(customer.getUsername(), customer.getPassword()));
+				transferFund(customer);
 		}
 	}
 
@@ -671,12 +688,12 @@ public class AccountService {
 	public static void transferFund(AccountEmployee account) {
 		System.out.println("--- 3. Transfer Funds Menu ----");
 		System.out.println("Select what type of accounts to transfer");
-		System.out.println("1. Checkings \n2. Savings");
+		System.out.println("1. Checkings \n2. Savings \n3. Go back to Employee's Main Menu");
 		String choice = scan.nextLine();
 		switch (choice) {
 			//From Checking
 			case "1":
-				System.out.println("----Please Select Your Checking Account--------");
+				System.out.println("----Please Select Checking Account To Transfer From--------");
 				System.out.println("----Please pick which account--------");
 				if (account.getCheckingAccounts().size() == 0) {
 					System.out.println("You haven't opened any Checking account yet.");
@@ -714,8 +731,7 @@ public class AccountService {
 					}
 					
 					int selectCheckingAccount = Integer.parseInt(scan.nextLine());
-					
-					
+
 					if (selectCheckingAccount < numberOfAccounts) {
 
 							System.out.println("System: Which type of account do you want transfer to?");
@@ -731,19 +747,19 @@ public class AccountService {
 									//this employee's savings
 									for (int i=0; i< account.getSavingsAccounts().size(); i++) {
 										if (account.getSavingsAccounts().get(i).isSavingsAccountStatus() != false) {
-											System.out.println("Pick ++> " + numberOfAccounts + " <++ Your checking account ID "
+											System.out.println("Pick ++> " + numberOfSavingsToTransfer + " <++ Your Checking account ID "
 													+ account.getSavingsAccounts().get(i).getSavingsAccountID() 
 													+ " has total balance: $"
 													+ account.getSavingsAccounts().get(i).getSavingsBalance());
 											numberOfSavingsToTransfer++;
-											transferSavingsIDList.add(account.getCheckingAccounts().get(i).getCheckingAccountID());
+											transferSavingsIDList.add(account.getSavingsAccounts().get(i).getSavingsAccountID());
 										}
 									}
 									
 									//all customers' savings
 									for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
-										for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList.get(customerListIndex).getCheckingAccounts().size(); customerSavingsIndex++) {
-											if (allCustomerList.get(customerListIndex).getCheckingAccount(customerSavingsIndex).isCheckingAccountStatus() != false) {
+										for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList.get(customerListIndex).getSavingsAccounts().size(); customerSavingsIndex++) {
+											if (allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).isSavingsAccountStatus() != false) {
 												System.out.println("Pick ++> " + numberOfSavingsToTransfer + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Savings account ID "
 														+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID()
 														+ " has total balance: $"
@@ -757,7 +773,19 @@ public class AccountService {
 									int CheckingToSavingsChoice = Integer.parseInt(scan.nextLine());
 									
 									try {
-										if (CheckingToSavingsChoice < transferSavingsIDList.size() || CheckingToSavingsChoice > 0) {
+										if (CheckingToSavingsChoice < 0) {
+											System.out.println("Invalid option number (smaller than 0). Try again");
+											log.warn("User attempted to pick invalid option number smaller than 0.");
+										} else if (CheckingToSavingsChoice < transferSavingsIDList.size()) {
+											//TODO transfer
+											//ID of Transfer To savings
+											int CheckingToSavingsID = selectCheckingIDList.get(selectCheckingAccount);
+											int TransferToSavingsID = transferSavingsIDList.get(CheckingToSavingsChoice);
+											
+											System.out.println("Type how much you want to transfer: ");
+											double amount = Double.parseDouble(scan.nextLine());
+											employeeController.transferCheckingToSavings(CheckingToSavingsID, TransferToSavingsID, amount);
+											employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
 											
 										} else {
 											System.out.println("Invalid option number. Try again");
@@ -776,7 +804,7 @@ public class AccountService {
 									//this employee's Checking
 									for (int i=0; i< account.getCheckingAccounts().size(); i++) {
 										if (account.getCheckingAccounts().get(i).isCheckingAccountStatus() != false) {
-											System.out.println("Pick ++> " + numberOfAccounts + " <++ Your checking account ID "
+											System.out.println("Pick ++> " + numberOfCheckingToTransfer + " <++ Your checking account ID "
 													+ account.getCheckingAccounts().get(i).getCheckingAccountID() 
 													+ " has total balance: $"
 													+ account.getCheckingAccounts().get(i).getCheckingBalance());
@@ -784,12 +812,12 @@ public class AccountService {
 											transferCheckingIDList.add(account.getCheckingAccounts().get(i).getCheckingAccountID());
 										}
 									}
-									//All Customer's Checking
 									
+									//All Customer's Checking			
 									for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
 										for (int customerCheckingIndex = 0; customerCheckingIndex < allCustomerList.get(customerListIndex).getCheckingAccounts().size(); customerCheckingIndex++) {
 											if (allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).isCheckingAccountStatus() != false) {
-												System.out.println("Pick ++> " + numberOfAccounts + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
+												System.out.println("Pick ++> " + numberOfCheckingToTransfer + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
 														+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID()
 														+ " has total balance: $"
 														+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingBalance());
@@ -799,28 +827,603 @@ public class AccountService {
 										}
 									}
 									
+									int SavingsToSavingsChoice = Integer.parseInt(scan.nextLine());
+									
+									try {
+										if (SavingsToSavingsChoice < 0) {
+											System.out.println("Invalid option number (smaller than 0). Try again");
+											log.warn("User attempted to pick invalid option number smaller than 0.");
+										} else if (SavingsToSavingsChoice < transferCheckingIDList.size()) {
+											//TODO transfer
+											//ID of Transfer To Checking
+											int CheckingToCheckingID = selectCheckingIDList.get(selectCheckingAccount);
+											int TransferToCheckingID = transferCheckingIDList.get(SavingsToSavingsChoice);
+											
+											System.out.println("Type how much you want to transfer: ");
+											double amount = Double.parseDouble(scan.nextLine());
+											employeeController.transferCheckingToChecking(CheckingToCheckingID, TransferToCheckingID, amount);
+											employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
+											
+										} else {
+											System.out.println("Invalid option number. Try again");
+											log.warn("User attempted to pick invalid option number");
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.debug("Checking to Checking transaction failed");
+									}
+									
 								default:
 									System.out.println("Invalid Option menu. Try again.");
 									transferFund(account);
-							}
-							
+							}	
 					}
-
 				}
 			case "2":
-				
+				//From Savings
+				System.out.println("----Please Select Savings Account To Transfer From--------");
+				System.out.println("----Please pick which account--------");
+				if (account.getCheckingAccounts().size() == 0) {
+					System.out.println("You haven't opened any Checking account yet.");
+				} else {
+					int numberOfAccounts = 0;
+					//All available Checking accounts to choose:
+					List<Integer> selectSavingsIDList = new ArrayList<Integer>();
+					
+					//Checking accounts from Employees
+					for (int i=0; i< account.getSavingsAccounts().size(); i++) {
+						if (account.getSavingsAccounts().get(i).isSavingsAccountStatus() != false) {
+							System.out.println("Pick ++> " + numberOfAccounts + " <++ Your Savings account ID "
+									+ account.getSavingsAccounts().get(i).getSavingsAccountID() 
+									+ " has total balance: $"
+									+ account.getSavingsAccounts().get(i).getSavingsBalance());
+							numberOfAccounts++;
+							selectSavingsIDList.add(account.getSavingsAccounts().get(i).getSavingsAccountID());
+						}
+					}
+					//Savings accounts from Customers
+					//Get all customer
+					List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
+					
+					for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+						for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList.get(customerListIndex).getSavingsAccounts().size(); customerSavingsIndex++) {
+							if (allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).isSavingsAccountStatus() != false) {
+								System.out.println("Pick ++> " + numberOfAccounts + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Savings account ID "
+										+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID()
+										+ " has total balance: $"
+										+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsBalance());
+								numberOfAccounts++;
+								selectSavingsIDList.add(allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID());
+							}
+						}
+					}
+					
+					int selectSavingsAccount = Integer.parseInt(scan.nextLine());
+
+					if (selectSavingsAccount < numberOfAccounts) {
+
+							System.out.println("System: Which type of account do you want transfer to?");
+							System.out.println("1. Savings \n2. Checking");
+							String accountTypeTransferTo = scan.nextLine();
+							
+							switch (accountTypeTransferTo) {
+								//SavingstoSavings
+								case "1":
+									List<Integer> transferSavingsIDList = new ArrayList<Integer>();
+									int numberOfSavingsToTransfer = 0;
+									
+									//this employee's savings
+									for (int i=0; i< account.getSavingsAccounts().size(); i++) {
+										if (account.getSavingsAccounts().get(i).isSavingsAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfSavingsToTransfer + " <++ Your Savings account ID "
+													+ account.getSavingsAccounts().get(i).getSavingsAccountID() 
+													+ " has total balance: $"
+													+ account.getSavingsAccounts().get(i).getSavingsBalance());
+											numberOfSavingsToTransfer++;
+											transferSavingsIDList.add(account.getSavingsAccounts().get(i).getSavingsAccountID());
+										}
+									}
+									
+									//all customers' savings
+									for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+										for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList.get(customerListIndex).getSavingsAccounts().size(); customerSavingsIndex++) {
+											if (allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).isSavingsAccountStatus() != false) {
+												System.out.println("Pick ++> " + numberOfSavingsToTransfer + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Savings account ID "
+														+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID()
+														+ " has total balance: $"
+														+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsBalance());
+												numberOfSavingsToTransfer++;
+												transferSavingsIDList.add(allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID());
+											}
+										}
+									}
+									
+									int SavingsToSavingsChoice = Integer.parseInt(scan.nextLine());
+									
+									try {
+										if (SavingsToSavingsChoice < 0) {
+											System.out.println("Invalid option number (smaller than 0). Try again");
+											log.warn("User attempted to pick invalid option number smaller than 0.");
+										} else if (SavingsToSavingsChoice < transferSavingsIDList.size()) {
+											//TODO transfer
+											//ID of Transfer To savings
+											int SavingsToSavingsID = selectSavingsIDList.get(selectSavingsAccount);
+											int TransferToSavingsID = transferSavingsIDList.get(SavingsToSavingsChoice);
+											System.out.println("Debug: ID1: " + SavingsToSavingsID + " ID2: " +TransferToSavingsID);
+											
+											System.out.println("Type how much you want to transfer: ");
+											double amount = Double.parseDouble(scan.nextLine());
+											employeeController.transferSavingsToSavings(SavingsToSavingsID, TransferToSavingsID, amount);
+											employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
+											
+										} else {
+											System.out.println("Invalid option number. Try again");
+											log.warn("User attempted to pick invalid option number");
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.debug("Savings to Savings transaction failed");
+									}
+									
+								//SavingstoCheckings
+								case "2":
+									List<Integer> transferCheckingIDList = new ArrayList<Integer>();
+									int numberOfCheckingToTransfer = 0;
+									
+									//this employee's Checking
+									for (int i=0; i< account.getCheckingAccounts().size(); i++) {
+										if (account.getCheckingAccounts().get(i).isCheckingAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfCheckingToTransfer + " <++ Your Checking account ID "
+													+ account.getCheckingAccounts().get(i).getCheckingAccountID() 
+													+ " has total balance: $"
+													+ account.getCheckingAccounts().get(i).getCheckingBalance());
+											numberOfCheckingToTransfer++;
+											transferCheckingIDList.add(account.getCheckingAccounts().get(i).getCheckingAccountID());
+										}
+									}
+									
+									//All Customer's Checking			
+									for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+										for (int customerCheckingIndex = 0; customerCheckingIndex < allCustomerList.get(customerListIndex).getCheckingAccounts().size(); customerCheckingIndex++) {
+											if (allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).isCheckingAccountStatus() != false) {
+												System.out.println("Pick ++> " + numberOfCheckingToTransfer + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
+														+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID()
+														+ " has total balance: $"
+														+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingBalance());
+												numberOfCheckingToTransfer++;
+												transferCheckingIDList.add(allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
+											}
+										}
+									}
+									
+									int SavingsToCheckingChoice = Integer.parseInt(scan.nextLine());
+									
+									try {
+										if (SavingsToCheckingChoice < 0) {
+											System.out.println("Invalid option number (smaller than 0). Try again");
+											log.warn("User attempted to pick invalid option number smaller than 0.");
+										} else if (SavingsToCheckingChoice < transferCheckingIDList.size()) {
+											//TODO transfer
+											//ID of Transfer To Checking
+											int SavingsToCheckingID = selectSavingsIDList.get(selectSavingsAccount);
+											int TransferToCheckingID = transferCheckingIDList.get(SavingsToCheckingChoice);
+											
+											System.out.println("Debug: ID1: " + SavingsToCheckingID + " ID2: " +TransferToCheckingID);
+											
+											System.out.println("Type how much you want to transfer: ");
+											double amount = Double.parseDouble(scan.nextLine());
+											employeeController.transferSavingsToChecking(TransferToCheckingID, SavingsToCheckingID, amount);
+											employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
+											
+										} else {
+											System.out.println("Invalid option number. Try again");
+											log.warn("User attempted to pick invalid option number");
+										}
+									} catch (Exception e) {
+										e.printStackTrace();
+										log.debug("Checking to Checking transaction failed");
+									}
+									
+								default:
+									System.out.println("Invalid Option menu. Try again.");
+									transferFund(account);
+							}	
+					}
+				}
+			case "3":
+				System.out.println("Going back to previous menu...");
+				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
 			default:
 				System.out.println("You've entered invalid value, please try again");
-				employeePageController.showEmployeePage(employeeController.findEmployee(employee.getUsername(), employee.getPassword()));
+				transferFund(account);
+		} 
+	}
+
+	//Admin
+	public static void transferFund(AccountAdmin account) {
+		System.out.println("--- 3. Transfer Funds Menu ----");
+		System.out.println("Select what type of accounts to transfer");
+		System.out.println("1. Checkings \n2. Savings \n3. Go back to main Admin Page.");
+		String choice = scan.nextLine();
+		switch (choice) {
+			//From Checking
+			case "1":
+				System.out.println("----Please Select Checking Account To Transfer From--------");
+				System.out.println("----Please pick which account--------");
+				
+				int numberOfAccounts = 0;
+				//All available Checking accounts to choose:
+				List<Integer> selectCheckingIDList = new ArrayList<Integer>();
+				
+				//All Checking accounts from Employees
+				List<AccountEmployee> allEmployeeList = employeeController.showAllEmployees();
+				
+				System.out.println("**** List of all Employees' Checking Accounts ***");
+				for (int employeeListIndex = 0; employeeListIndex < allEmployeeList.size(); employeeListIndex ++) {
+					for (int employeeCheckingIndex = 0; employeeCheckingIndex < allEmployeeList.get(employeeListIndex).getCheckingAccounts().size(); employeeCheckingIndex++) {
+						if (allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).isCheckingAccountStatus() != false) {
+							System.out.println("Pick ++> " + numberOfAccounts + " <++ Employee's username "+ allEmployeeList.get(employeeListIndex).getUsername() + " with Checking account ID "
+									+ allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID()
+									+ " has total balance: $"
+									+ allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingBalance());
+							numberOfAccounts++;
+							selectCheckingIDList.add(allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID());
+						}
+					}
+				}
+				
+				//Checking accounts from Customers
+				//Get all customer
+				List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
+				System.out.println("**** List of all Customers' Checking Accounts ***");
+				for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+					for (int customerCheckingIndex = 0; customerCheckingIndex < allCustomerList.get(customerListIndex).getCheckingAccounts().size(); customerCheckingIndex++) {
+						if (allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).isCheckingAccountStatus() != false) {
+							System.out.println("Pick ++> " + numberOfAccounts + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
+									+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID()
+									+ " has total balance: $"
+									+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingBalance());
+							numberOfAccounts++;
+							selectCheckingIDList.add(allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
+						}
+					}
+				}
+				
+				int selectCheckingAccount = Integer.parseInt(scan.nextLine());
+
+				if (selectCheckingAccount < numberOfAccounts) {
+						
+						System.out.println("System: Which type of account do you want transfer to?");
+						System.out.println("1. Savings \n2. Checking");
+						String accountTypeTransferTo = scan.nextLine();
+						
+						switch (accountTypeTransferTo) {
+							//CheckingtoSavings
+							case "1":
+								List<Integer> transferSavingsIDList = new ArrayList<Integer>();
+								int numberOfSavingsToTransfer = 0;
+								
+								//all employee's savings
+								for (int employeeListIndex = 0; employeeListIndex < allEmployeeList.size(); employeeListIndex ++) {
+									for (int employeeCheckingIndex = 0; employeeCheckingIndex < allEmployeeList.get(employeeListIndex).getSavingsAccounts().size(); employeeCheckingIndex++) {
+										if (allEmployeeList.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).isSavingsAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfSavingsToTransfer + " <++ Employee's username "+ allEmployeeList.get(employeeListIndex).getUsername() + " with Savings account ID "
+													+ allEmployeeList.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsAccountID()
+													+ " has total balance: $"
+													+ allEmployeeList.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsBalance());
+											numberOfSavingsToTransfer++;
+											transferSavingsIDList.add(allEmployeeList.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsAccountID());
+										}
+									}
+								}
+								
+								//all customers' savings
+								System.out.println("**** List of all Customers' Savings Accounts ***");
+								for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+									for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList.get(customerListIndex).getSavingsAccounts().size(); customerSavingsIndex++) {
+										if (allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).isSavingsAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfSavingsToTransfer + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Savings account ID "
+													+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID()
+													+ " has total balance: $"
+													+ allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsBalance());
+											numberOfSavingsToTransfer++;
+											transferSavingsIDList.add(allCustomerList.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID());
+										}
+									}
+								}
+								
+								int CheckingToSavingsChoice = Integer.parseInt(scan.nextLine());
+								
+								try {
+									if (CheckingToSavingsChoice < 0) {
+										System.out.println("Invalid option number (smaller than 0). Try again");
+										log.warn("User attempted to pick invalid option number smaller than 0.");
+									} else if (CheckingToSavingsChoice < transferSavingsIDList.size()) {
+										//TODO transfer
+										//ID of Transfer To savings
+										int CheckingToSavingsID = selectCheckingIDList.get(selectCheckingAccount);
+										int TransferToSavingsID = transferSavingsIDList.get(CheckingToSavingsChoice);
+										
+										System.out.println("Type how much you want to transfer: ");
+										double amount = Double.parseDouble(scan.nextLine());
+										employeeController.transferCheckingToSavings(CheckingToSavingsID, TransferToSavingsID, amount);
+										adminPageController.showAdminPage(adminController.findAdmin(account.getUsername(), account.getPassword()));
+										
+									} else {
+										System.out.println("Invalid option number. Try again");
+										log.warn("User attempted to pick invalid option number");
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									log.debug("Checking to Savings transaction failed");
+								}
+								
+							//CheckingtoCheckings
+							case "2":
+								List<Integer> transferCheckingIDList = new ArrayList<Integer>();
+								int numberOfCheckingToTransfer = 0;
+								
+								//all employees' Checking
+								System.out.println("**** List of all Employees' Checking Accounts ***");
+								for (int employeeListIndex = 0; employeeListIndex < allEmployeeList.size(); employeeListIndex ++) {
+									for (int employeeCheckingIndex = 0; employeeCheckingIndex < allEmployeeList.get(employeeListIndex).getCheckingAccounts().size(); employeeCheckingIndex++) {
+										if (allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).isCheckingAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfCheckingToTransfer + " <++ Employee's username "+ allEmployeeList.get(employeeListIndex).getUsername() + " with Checking account ID "
+													+ allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID()
+													+ " has total balance: $"
+													+ allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingBalance());
+											numberOfCheckingToTransfer++;
+											transferCheckingIDList.add(allEmployeeList.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID());
+										}
+									}
+								}
+								
+								//All Customers' Checking		
+								System.out.println("**** List of all Customers' Checking Accounts ***");
+								for (int customerListIndex = 0; customerListIndex < allCustomerList.size(); customerListIndex ++) {
+									for (int customerCheckingIndex = 0; customerCheckingIndex < allCustomerList.get(customerListIndex).getCheckingAccounts().size(); customerCheckingIndex++) {
+										if (allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).isCheckingAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfCheckingToTransfer + " <++ Customer's username "+ allCustomerList.get(customerListIndex).getUsername() + " with Checking account ID "
+													+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID()
+													+ " has total balance: $"
+													+ allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingBalance());
+											numberOfCheckingToTransfer++;
+											transferCheckingIDList.add(allCustomerList.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
+										}
+									}
+								}
+								
+								int SavingsToSavingsChoice = Integer.parseInt(scan.nextLine());
+								
+								try {
+									if (SavingsToSavingsChoice < 0) {
+										System.out.println("Invalid option number (smaller than 0). Try again");
+										log.warn("User attempted to pick invalid option number smaller than 0.");
+									} else if (SavingsToSavingsChoice < transferCheckingIDList.size()) {
+										//TODO transfer
+										//ID of Transfer To Checking
+										int CheckingToCheckingID = selectCheckingIDList.get(selectCheckingAccount);
+										int TransferToCheckingID = transferCheckingIDList.get(SavingsToSavingsChoice);
+										
+										System.out.println("Type how much you want to transfer: ");
+										double amount = Double.parseDouble(scan.nextLine());
+										employeeController.transferCheckingToChecking(CheckingToCheckingID, TransferToCheckingID, amount);
+										adminPageController.showAdminPage(adminController.findAdmin(account.getUsername(), account.getPassword()));
+										
+									} else {
+										System.out.println("Invalid option number. Try again");
+										log.warn("User attempted to pick invalid option number");
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									log.debug("Checking to Checking transaction failed");
+								}
+								
+							default:
+								System.out.println("Invalid Option menu. Try again.");
+								transferFund(account);
+						}	
+				}
+				
+			//TODO from savings
+			case "2":
+				//From Savings
+				System.out.println("----Please Select Savings Account To Transfer From--------");
+				System.out.println("----Please pick which account--------");
+				
+				int numberOfSavingsAccounts = 0;
+				//All available Checking accounts to choose:
+				List<Integer> selectSavingsIDList = new ArrayList<Integer>();
+				
+				List<AccountEmployee> allEmployeeList2 = employeeController.showAllEmployees();
+				
+				//All Savings from Employees
+				System.out.println("**** List of all Employees' Savings Accounts ***");
+				for (int employeeListIndex = 0; employeeListIndex < allEmployeeList2.size(); employeeListIndex ++) {
+					for (int employeeCheckingIndex = 0; employeeCheckingIndex < allEmployeeList2.get(employeeListIndex).getSavingsAccounts().size(); employeeCheckingIndex++) {
+						if (allEmployeeList2.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).isSavingsAccountStatus() != false) {
+							System.out.println("Pick ++> " + numberOfSavingsAccounts + " <++ Employee's username "+ allEmployeeList2.get(employeeListIndex).getUsername() + " with Savings account ID "
+									+ allEmployeeList2.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsAccountID()
+									+ " has total balance: $"
+									+ allEmployeeList2.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsBalance());
+							numberOfSavingsAccounts++;
+							selectSavingsIDList.add(allEmployeeList2.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsAccountID());
+						}
+					}
+				}
+				//Savings accounts from Customers
+				//Get all customer
+				List<AccountCustomer> allCustomerList2 = customerController.showAllCustomers();
+				System.out.println("**** List of all Customer' Savings Accounts ***");
+				for (int customerListIndex = 0; customerListIndex < allCustomerList2.size(); customerListIndex ++) {
+					for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList2.get(customerListIndex).getSavingsAccounts().size(); customerSavingsIndex++) {
+						if (allCustomerList2.get(customerListIndex).getSavingsAccount(customerSavingsIndex).isSavingsAccountStatus() != false) {
+							System.out.println("Pick ++> " + numberOfSavingsAccounts + " <++ Customer's username "+ allCustomerList2.get(customerListIndex).getUsername() + " with Savings account ID "
+									+ allCustomerList2.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID()
+									+ " has total balance: $"
+									+ allCustomerList2.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsBalance());
+							numberOfSavingsAccounts++;
+							selectSavingsIDList.add(allCustomerList2.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID());
+						}
+					}
+				}
+				
+				int selectSavingsAccount = Integer.parseInt(scan.nextLine());
+
+				if (selectSavingsAccount < numberOfSavingsAccounts) {
+
+						System.out.println("System: Which type of account do you want transfer to?");
+						System.out.println("1. Savings \n2. Checking");
+						String accountTypeTransferTo = scan.nextLine();
+						
+						switch (accountTypeTransferTo) {
+							//SavingstoSavings
+							case "1":
+								List<Integer> transferSavingsIDList = new ArrayList<Integer>();
+								int numberOfSavingsToTransfer = 0;
+								
+								//all employees' savings
+								System.out.println("**** List of all Employees' Savings Accounts ***");
+								for (int employeeListIndex = 0; employeeListIndex < allEmployeeList2.size(); employeeListIndex ++) {
+									for (int employeeCheckingIndex = 0; employeeCheckingIndex < allEmployeeList2.get(employeeListIndex).getSavingsAccounts().size(); employeeCheckingIndex++) {
+										if (allEmployeeList2.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).isSavingsAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfSavingsToTransfer + " <++ Employee's username "+ allEmployeeList2.get(employeeListIndex).getUsername() + " with Savings account ID "
+													+ allEmployeeList2.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsAccountID()
+													+ " has total balance: $"
+													+ allEmployeeList2.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsBalance());
+											numberOfSavingsToTransfer++;
+											transferSavingsIDList.add(allEmployeeList2.get(employeeListIndex).getSavingsAccount(employeeCheckingIndex).getSavingsAccountID());
+										}
+									}
+								}
+								
+								//all customers' savings
+								System.out.println("**** List of all Customers' Checking Accounts ***");
+								for (int customerListIndex = 0; customerListIndex < allCustomerList2.size(); customerListIndex ++) {
+									for (int customerSavingsIndex = 0; customerSavingsIndex < allCustomerList2.get(customerListIndex).getSavingsAccounts().size(); customerSavingsIndex++) {
+										if (allCustomerList2.get(customerListIndex).getSavingsAccount(customerSavingsIndex).isSavingsAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfSavingsToTransfer + " <++ Customer's username "+ allCustomerList2.get(customerListIndex).getUsername() + " with Savings account ID "
+													+ allCustomerList2.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID()
+													+ " has total balance: $"
+													+ allCustomerList2.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsBalance());
+											numberOfSavingsToTransfer++;
+											transferSavingsIDList.add(allCustomerList2.get(customerListIndex).getSavingsAccount(customerSavingsIndex).getSavingsAccountID());
+										}
+									}
+								}
+								
+								int SavingsToSavingsChoice = Integer.parseInt(scan.nextLine());
+								
+								try {
+									if (SavingsToSavingsChoice < 0) {
+										System.out.println("Invalid option number (smaller than 0). Try again");
+										log.warn("User attempted to pick invalid option number smaller than 0.");
+									} else if (SavingsToSavingsChoice < transferSavingsIDList.size()) {
+										//TODO transfer
+										//ID of Transfer To savings
+										int SavingsToSavingsID = selectSavingsIDList.get(selectSavingsAccount);
+										int TransferToSavingsID = transferSavingsIDList.get(SavingsToSavingsChoice);
+										System.out.println("Debug: ID1: " + SavingsToSavingsID + " ID2: " +TransferToSavingsID);
+										
+										System.out.println("Type how much you want to transfer: ");
+										double amount = Double.parseDouble(scan.nextLine());
+										employeeController.transferSavingsToSavings(SavingsToSavingsID, TransferToSavingsID, amount);
+										adminPageController.showAdminPage(adminController.findAdmin(account.getUsername(), account.getPassword()));
+										
+									} else {
+										System.out.println("Invalid option number. Try again");
+										log.warn("User attempted to pick invalid option number");
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									log.debug("Savings to Savings transaction failed");
+								}
+								
+							//SavingstoCheckings
+							case "2":
+								List<Integer> transferCheckingIDList = new ArrayList<Integer>();
+								int numberOfCheckingToTransfer = 0;
+								
+								//all employees' checkings
+								System.out.println("**** List of all Employees' Checking Accounts ***");
+								for (int employeeListIndex = 0; employeeListIndex < allEmployeeList2.size(); employeeListIndex ++) {
+									for (int employeeCheckingIndex = 0; employeeCheckingIndex < allEmployeeList2.get(employeeListIndex).getCheckingAccounts().size(); employeeCheckingIndex++) {
+										if (allEmployeeList2.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).isCheckingAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfCheckingToTransfer + " <++ Employee's username "+ allEmployeeList2.get(employeeListIndex).getUsername() + " with Checking account ID "
+													+ allEmployeeList2.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID()
+													+ " has total balance: $"
+													+ allEmployeeList2.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingBalance());
+											numberOfCheckingToTransfer++;
+											transferCheckingIDList.add(allEmployeeList2.get(employeeListIndex).getCheckingAccount(employeeCheckingIndex).getCheckingAccountID());
+										}
+									}
+								}
+								
+								//All Customer's checkings
+								System.out.println("**** List of all Customers' Checking Accounts ***");
+								for (int customerListIndex = 0; customerListIndex < allCustomerList2.size(); customerListIndex ++) {
+									for (int customerCheckingIndex = 0; customerCheckingIndex < allCustomerList2.get(customerListIndex).getCheckingAccounts().size(); customerCheckingIndex++) {
+										if (allCustomerList2.get(customerListIndex).getCheckingAccount(customerCheckingIndex).isCheckingAccountStatus() != false) {
+											System.out.println("Pick ++> " + numberOfCheckingToTransfer + " <++ Customer's username "+ allCustomerList2.get(customerListIndex).getUsername() + " with Checking account ID "
+													+ allCustomerList2.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID()
+													+ " has total balance: $"
+													+ allCustomerList2.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingBalance());
+											numberOfCheckingToTransfer++;
+											transferCheckingIDList.add(allCustomerList2.get(customerListIndex).getCheckingAccount(customerCheckingIndex).getCheckingAccountID());
+										}
+									}
+								}
+								
+								int SavingsToCheckingChoice = Integer.parseInt(scan.nextLine());
+								
+								try {
+									if (SavingsToCheckingChoice < 0) {
+										System.out.println("Invalid option number (smaller than 0). Try again");
+										log.warn("User attempted to pick invalid option number smaller than 0.");
+									} else if (SavingsToCheckingChoice < transferCheckingIDList.size()) {
+										//TODO transfer
+										//ID of Transfer To Checking
+										int SavingsToCheckingID = selectSavingsIDList.get(selectSavingsAccount);
+										int TransferToCheckingID = transferCheckingIDList.get(SavingsToCheckingChoice);
+										
+										System.out.println("Debug: ID1: " + SavingsToCheckingID + " ID2: " +TransferToCheckingID);
+										
+										System.out.println("Type how much you want to transfer: ");
+										double amount = Double.parseDouble(scan.nextLine());
+										employeeController.transferSavingsToChecking(TransferToCheckingID, SavingsToCheckingID, amount);
+										adminPageController.showAdminPage(adminController.findAdmin(account.getUsername(), account.getPassword()));
+										
+									} else {
+										System.out.println("Invalid option number. Try again");
+										log.warn("User attempted to pick invalid option number");
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									log.debug("Checking to Checking transaction failed");
+								}
+								
+							default:
+								System.out.println("Invalid Option menu. Try again.");
+								transferFund(account);
+						}	
+				}
+			case "3":
+				System.out.println("Going back to previous menu...");
+				adminPageController.showAdminPage(adminController.findAdmin(account.getUsername(), account.getPassword()));
+			default:
+				System.out.println("You've entered invalid value, please try again");
+				transferFund(account);
 		} 
 	}
 
 	//Approve Accounts
 	//Admin
+	//Approve Accounts
+	//Admin
 	public static void approveAccount(AccountAdmin account) {
 		System.out.println("--- 4. Approve Accounts Menu ----");
 		System.out.println("Select what type of accounts to approved");
-		System.out.println("1. Checkings \n2. Savings");
+		System.out.println("1. Checkings \n2. Savings \n3. Go back to Admin's main menu");
 		
 		List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
 		List<AccountEmployee> allEmployeeList = employeeController.showAllEmployees();
@@ -931,18 +1534,21 @@ public class AccountService {
 					employeeController.approveSavings(selectedID);
 					approveAccount(account);	
 				}
-				
+			
+			case "3":
+				System.out.println("Going back to previous menu...");
+				adminPageController.showAdminPage(adminController.findAdmin(account.getUsername(), account.getPassword()));	
 			default:
 				System.out.println("You've entered invalid value, please try again");
-				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));					
+				approveAccount(account);	
 		}
 	}
-
+	//Employee
 	//Employee
 	public static void approveAccount(AccountEmployee account) {
 			System.out.println("--- 4. Approve Accounts Menu ----");
 			System.out.println("Select what type of accounts to approved");
-			System.out.println("1. Checkings \n2. Savings");
+			System.out.println("1. Checkings \n2. Savings \n3. Go back to Employee's Main Menu");
 			
 			List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
 			String choice = scan.nextLine();
@@ -1013,20 +1619,25 @@ public class AccountService {
 						employeeController.approveSavings(selectedID);
 						approveAccount(account);	
 					}
-					
+				
+				case "3":
+					System.out.println("Going back to previous menu...");
+					employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));					
 				default:
 					System.out.println("You've entered invalid value, please try again");
-					employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));					
+					approveAccount(account);
 			}
 
 		}
 
+	//Cancel Accounts
+	//Employee
 	//Deny Accounts
 	//Employee
 	public static void cancelAccount(AccountEmployee account) {
 		System.out.println("--- 4. Cancelling Accounts Menu ----");
 		System.out.println("Select what type of accounts to cancel");
-		System.out.println("1. Checkings \n2. Savings");
+		System.out.println("1. Checkings \n2. Savings \n3. Go back to Admin's Main Menu");
 		
 		List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
 		String choice = scan.nextLine();
@@ -1098,19 +1709,22 @@ public class AccountService {
 					employeeController.deleteSavings(selectedID);
 					cancelAccount(account);
 				}
-				
+			case "3":
+				System.out.println("Going back to previous menu...");
+				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
 			default:
 				System.out.println("You've entered invalid value, please try again");
-				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
+				cancelAccount(account);
 		}
 
 	}
 
 	//Admin
+	//Admin
 	public static void cancelAccount(AccountAdmin account) {
 		System.out.println("--- 4. Cancelling Accounts Menu ----");
 		System.out.println("Select what type of accounts to cancel");
-		System.out.println("1. Checkings \n2. Savings");
+		System.out.println("1. Checkings \n2. Savings \n3. Go back to Admin's Main Menu");
 		
 		List<AccountCustomer> allCustomerList = customerController.showAllCustomers();
 		List<AccountEmployee> allEmployeeList = employeeController.showAllEmployees();
@@ -1219,10 +1833,13 @@ public class AccountService {
 					employeeController.deleteSavings(selectedID);
 					cancelAccount(account);
 				}
+			case "3":
+				System.out.println("Go back to previous menu...");
+				adminPageController.showAdminPage(adminController.findAdmin(account.getUsername(), account.getPassword()));
 				
 			default:
 				System.out.println("You've entered invalid value, please try again");
-				employeePageController.showEmployeePage(employeeController.findEmployee(account.getUsername(), account.getPassword()));
+				cancelAccount(account);
 		}
 
 	}

@@ -61,4 +61,19 @@ public class EmployeeService {
 	public boolean deleteSavings(int accountID) {
 		return employeeDAO.deleteChecking(accountID);
 	}
+	
+	public boolean transferCheckingToSavings(int checkingID, int savingsID, double amount) {
+		return employeeDAO.transferCheckingToSavings(checkingID, savingsID, amount);
+	};
+	public boolean transferSavingsToChecking(int checkingID, int savingsID, double amount) {
+		return employeeDAO.transferSavingsToChecking(checkingID, savingsID, amount);
+	};
+	
+	public boolean transferCheckingToChecking(int checkingID, int checking2ID, double amount) {
+		return employeeDAO.transferCheckingToChecking(checkingID, checking2ID, amount);
+	};
+	public boolean transferSavingsToSavings(int savingsID, int savings2ID, double amount) {
+		return employeeDAO.transferSavingsToSavings(savingsID, savings2ID, amount);
+	};
+	
 }

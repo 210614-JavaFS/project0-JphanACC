@@ -2,6 +2,9 @@ package com.revature.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.revature.models.AccountCustomer;
 import com.revature.models.Checking;
 import com.revature.models.Savings;
@@ -10,6 +13,7 @@ import com.revature.services.CustomerService;
 import jdk.internal.org.jline.utils.Log;
 
 public class CustomerController {
+	public static Logger log = LoggerFactory.getLogger(MenuController.class);
 	public static CustomerService customerService = new CustomerService();
 	
 	public List<AccountCustomer> showAllCustomers() {
@@ -104,7 +108,7 @@ public class CustomerController {
 		if (customerService.transferCheckingToSavings(checking, savings, amount)) {
 			System.out.println("Sending request completed...");
 		} else {
-			Log.warn("Transfer Checking to Savings did not complete");
+			log.warn("Transfer Checking to Savings did not complete");
 			System.out.println("Something went wrong, try again...");
 		}
 	}
@@ -115,7 +119,7 @@ public class CustomerController {
 		if (customerService.transferSavingsToChecking(checking, savings, amount)) {
 			System.out.println("Sending request completed...");
 		} else {
-			Log.warn("Transfer Savings to Checking did not complete");
+			log.warn("Transfer Savings to Checking did not complete");
 			System.out.println("Something went wrong, try again...");
 		}
 	}
@@ -126,7 +130,7 @@ public class CustomerController {
 		if (customerService.transferCheckingToChecking(checking, checking2, amount)) {
 			System.out.println("Sending request completed...");
 		} else {
-			Log.warn("Transfer Checking to Checking did not complete");
+			log.warn("Transfer Checking to Checking did not complete");
 			System.out.println("Something went wrong, try again...");
 		}
 	}
@@ -137,7 +141,7 @@ public class CustomerController {
 		if (customerService.transferSavingsToSavings(savings, savings2, amount)) {
 			System.out.println("Sending request completed...");
 		} else {
-			Log.warn("Transfer Savings to Savings did not complete");
+			log.warn("Transfer Savings to Savings did not complete");
 			System.out.println("Something went wrong, try again...");
 		}
 	}

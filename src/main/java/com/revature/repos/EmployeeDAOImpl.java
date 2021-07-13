@@ -325,4 +325,189 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		}
 			return false;
 	}
+
+	
+	 
+	//Checking to Savings
+	@Override
+	public boolean transferCheckingToSavings(int checkingID, int savingsID, double amount) {
+		try(Connection conn = ConnectionUtils.getConnection()){
+			String updateCheckingSQL = "UPDATE checking_balances SET checking_balance = ? WHERE checking_account_id = ?;";
+			String updateSavingsSQL = "UPDATE savings_balances SET savings_balance = ? WHERE savings_account_id = ?;";
+			
+			PreparedStatement statementCheckingUpdate = conn.prepareStatement(updateCheckingSQL);
+			PreparedStatement statementSavingsUpdate = conn.prepareStatement(updateSavingsSQL);
+			
+			//Get the balance Checking
+			String getCheckingSQL = "SELECT checking_balance FROM checking_balances WHERE checking_account_id = ?;";
+			PreparedStatement statementGetChecking = conn.prepareStatement(getCheckingSQL);
+			statementGetChecking.setInt(1, checkingID);
+			ResultSet resultFromCheckingGet = statementGetChecking.executeQuery();
+			double checkingBalance = 0;
+			while (resultFromCheckingGet.next()) {
+				checkingBalance = resultFromCheckingGet.getInt("checking_balance");
+			}
+		
+			statementCheckingUpdate.setInt(2, checkingID);
+			statementCheckingUpdate.setDouble(1, checkingBalance - amount);
+			statementCheckingUpdate.execute();
+			
+			//Get the savings Checking
+			String getSavingsSQL = "SELECT savings_balance FROM savings_balances WHERE savings_account_id = ?;";
+			PreparedStatement statementGetSavings = conn.prepareStatement(getSavingsSQL);
+			statementGetSavings.setInt(1, savingsID);
+			ResultSet resultFromSavingsGet = statementGetSavings.executeQuery();
+			double savingsBalance = 0;
+			while (resultFromSavingsGet.next()) {
+				savingsBalance = resultFromSavingsGet.getInt("savings_balance");			
+			}
+			
+			statementSavingsUpdate.setInt(2, savingsID);
+			statementSavingsUpdate.setDouble(1, savingsBalance + amount);
+			statementSavingsUpdate.execute();
+			
+			return true;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean transferSavingsToChecking(int checkingID, int savingsID, double amount) {
+		try(Connection conn = ConnectionUtils.getConnection()){
+			String updateCheckingSQL = "UPDATE checking_balances SET checking_balance = ? WHERE checking_account_id = ?;";
+			String updateSavingsSQL = "UPDATE savings_balances SET savings_balance = ? WHERE savings_account_id = ?;";
+			
+			PreparedStatement statementCheckingUpdate = conn.prepareStatement(updateCheckingSQL);
+			PreparedStatement statementSavingsUpdate = conn.prepareStatement(updateSavingsSQL);
+			
+			//Get the balance Checking
+			String getCheckingSQL = "SELECT checking_balance FROM checking_balances WHERE checking_account_id = ?;";
+			PreparedStatement statementGetChecking = conn.prepareStatement(getCheckingSQL);
+			statementGetChecking.setInt(1, checkingID);
+			ResultSet resultFromCheckingGet = statementGetChecking.executeQuery();
+			double checkingBalance = 0;
+			while (resultFromCheckingGet.next()) {
+				checkingBalance = resultFromCheckingGet.getInt("checking_balance");
+			}
+		
+			statementCheckingUpdate.setInt(2, checkingID);
+			statementCheckingUpdate.setDouble(1, checkingBalance + amount);
+			statementCheckingUpdate.execute();
+			
+			//Get the savings Checking
+			String getSavingsSQL = "SELECT savings_balance FROM savings_balances WHERE savings_account_id = ?;";
+			PreparedStatement statementGetSavings = conn.prepareStatement(getSavingsSQL);
+			statementGetSavings.setInt(1, savingsID);
+			ResultSet resultFromSavingsGet = statementGetSavings.executeQuery();
+			double savingsBalance = 0;
+			while (resultFromSavingsGet.next()) {
+				savingsBalance = resultFromSavingsGet.getInt("savings_balance");
+			}
+			
+			statementSavingsUpdate.setInt(2, savingsID);
+			statementSavingsUpdate.setDouble(1, savingsBalance - amount);
+			statementSavingsUpdate.execute();
+			
+			return true;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean transferCheckingToChecking(int checkingID, int checking2id, double amount) {
+		try(Connection conn = ConnectionUtils.getConnection()){
+			String updateCheckingSQL = "UPDATE checking_balances SET checking_balance = ? WHERE checking_account_id = ?;";
+			String updateCheckingSQL2 = "UPDATE checking_balances SET checking_balance = ? WHERE checking_account_id = ?;";
+			
+			PreparedStatement statementCheckingUpdate = conn.prepareStatement(updateCheckingSQL);
+			PreparedStatement statementChecking2Update = conn.prepareStatement(updateCheckingSQL2);
+			
+			//Get the balance Checking
+			String getCheckingSQL = "SELECT checking_balance FROM checking_balances WHERE checking_account_id = ?;";
+			PreparedStatement statementGetChecking = conn.prepareStatement(getCheckingSQL);
+			statementGetChecking.setInt(1, checkingID);
+			ResultSet resultFromCheckingGet = statementGetChecking.executeQuery();
+			double checkingBalance = 0;
+			while (resultFromCheckingGet.next()) {
+				checkingBalance = resultFromCheckingGet.getInt("checking_balance");
+			}
+		
+			statementCheckingUpdate.setInt(2, checkingID);
+			statementCheckingUpdate.setDouble(1, checkingBalance - amount);
+			statementCheckingUpdate.execute();
+			
+			//Get the balance2 Checking
+			String getCheckingSQL2 = "SELECT checking_balance FROM checking_balances WHERE checking_account_id = ?;";
+			PreparedStatement statementGetChecking2 = conn.prepareStatement(getCheckingSQL2);
+			statementGetChecking2.setInt(1, checking2id);
+			ResultSet resultFromCheckingGet2 = statementGetChecking2.executeQuery();
+			double checkingBalance2 = 0;
+			while (resultFromCheckingGet2.next()) {
+				checkingBalance2 = resultFromCheckingGet2.getInt("checking_balance");
+			}
+			
+			statementChecking2Update.setInt(2, checking2id);
+			statementChecking2Update.setDouble(1, checkingBalance2 + amount);
+			statementChecking2Update.execute();
+			return true;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean transferSavingsToSavings(int savingsID, int savings2id, double amount) {
+		try(Connection conn = ConnectionUtils.getConnection()){
+			String updateSavingsSQL = "UPDATE savings_balances SET savings_balance = ? WHERE savings_account_id = ?;";
+			String updateSavingsSQL2 = "UPDATE savings_balances SET savings_balance = ? WHERE savings_account_id = ?;";
+			
+			PreparedStatement statementSavingsUpdate = conn.prepareStatement(updateSavingsSQL);
+			PreparedStatement statementSavingsUpdate2 = conn.prepareStatement(updateSavingsSQL2);
+			
+			//Get the Savings
+			String getSavingsSQL = "SELECT savings_balance FROM savings_balances WHERE savings_account_id = ?;";
+			PreparedStatement statementGetSavings = conn.prepareStatement(getSavingsSQL);
+			statementGetSavings.setInt(1, savingsID);
+			ResultSet resultFromSavingsGet = statementGetSavings.executeQuery();
+			double savingsBalance = 0;
+			while (resultFromSavingsGet.next()) {
+				savingsBalance = resultFromSavingsGet.getInt("savings_balance");
+			}
+		
+			statementSavingsUpdate.setInt(2, savingsID);
+			statementSavingsUpdate.setDouble(1, savingsBalance - amount);
+			statementSavingsUpdate.execute();
+			
+			//Get the Savings2 
+			String getSavingsSQL2 = "SELECT savings_balance FROM savings_balances WHERE savings_account_id = ?;";
+			PreparedStatement statementGetSavings2 = conn.prepareStatement(getSavingsSQL2);
+			statementGetSavings2.setInt(1, savings2id);
+			ResultSet resultFromSavingsGet2 = statementGetSavings2.executeQuery();
+			double savingsBalance2 = 0;
+			while (resultFromSavingsGet2.next()) {
+				savingsBalance2 = resultFromSavingsGet2.getInt("savings_balance");
+			}
+//			System.out.println("Debug from EmployeeDAO, amount is: " + (amount));
+//			System.out.println("Debug from EmployeeDAO, savingsBalance2 is: " + (savingsBalance2));
+//			System.out.println("Debug from EmployeeDAO, amount total is: " + (savingsBalance2 + amount));
+			
+			statementSavingsUpdate2.setInt(2, savings2id);
+			statementSavingsUpdate2.setDouble(1, savingsBalance2 + amount);
+			statementSavingsUpdate2.execute();
+			
+			return true;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

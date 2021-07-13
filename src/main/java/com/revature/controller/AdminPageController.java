@@ -39,7 +39,7 @@ public class AdminPageController {
 				AccountService.cancelAccount(account);
 				break;
 			case "3":
-//				AccountService.transferFund(account);
+				AccountService.transferFund(account);
 				break;
 			case "4":
 				System.out.println("Logging you out...");
