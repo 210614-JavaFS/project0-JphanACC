@@ -215,7 +215,7 @@ public class EmployeeController {
 		if (employeeService.transferSavingsToChecking(checkingID, savingsID, amount)) {
 			System.out.println("Sending request completed...");
 		} else {
-			log.warn("Transfer Checking to Savings did not complete");
+			log.warn("Transfer Savings to Savings did not complete");
 			System.out.println("Something went wrong, try again...");
 		}
 	}
@@ -231,7 +231,7 @@ public class EmployeeController {
 		} else if (employeeService.transferCheckingToChecking(checkingID, checkingID2, amount)) {
 			System.out.println("Sending request completed...");
 		} else {
-			log.warn("Transfer Checking to Savings did not complete");
+			log.warn("Transfer Checking to Checking did not complete");
 			System.out.println("Something went wrong, try again...");
 		}
 	}
@@ -247,7 +247,7 @@ public class EmployeeController {
 		} else if (employeeService.transferSavingsToSavings(savingsID, savings2ID, amount)) {
 			System.out.println("Sending request completed...");
 		} else {
-			log.warn("Transfer Checking to Savings did not complete");
+			log.warn("Transfer Savings to Savings did not complete");
 			System.out.println("Something went wrong, try again...");
 		}
 	}

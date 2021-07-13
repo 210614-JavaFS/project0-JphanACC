@@ -448,7 +448,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			statementGetChecking2.setInt(1, checking2id);
 			ResultSet resultFromCheckingGet2 = statementGetChecking2.executeQuery();
 			double checkingBalance2 = 0;
-			System.out.println("Account " + checking2id +" has old balance: " + checkingBalance2);
 			while (resultFromCheckingGet2.next()) {
 				checkingBalance2 = resultFromCheckingGet2.getInt("checking_balance");
 			}
@@ -456,8 +455,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			statementChecking2Update.setInt(2, checking2id);
 			statementChecking2Update.setDouble(1, checkingBalance2 + amount);
 			statementChecking2Update.execute();
-			
-			System.out.println("Account " + checking2id +" has new balance: " + checkingBalance2);
 			return true;
 			
 		} catch(SQLException e) {
@@ -493,11 +490,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			String getSavingsSQL2 = "SELECT savings_balance FROM savings_balances WHERE savings_account_id = ?;";
 			PreparedStatement statementGetSavings2 = conn.prepareStatement(getSavingsSQL2);
 			statementGetSavings2.setInt(1, savings2id);
-			ResultSet resultFromSavingsGet2 = statementGetSavings.executeQuery();
+			ResultSet resultFromSavingsGet2 = statementGetSavings2.executeQuery();
 			double savingsBalance2 = 0;
 			while (resultFromSavingsGet2.next()) {
 				savingsBalance2 = resultFromSavingsGet2.getInt("savings_balance");
 			}
+//			System.out.println("Debug from EmployeeDAO, amount is: " + (amount));
+//			System.out.println("Debug from EmployeeDAO, savingsBalance2 is: " + (savingsBalance2));
+//			System.out.println("Debug from EmployeeDAO, amount total is: " + (savingsBalance2 + amount));
 			
 			statementSavingsUpdate2.setInt(2, savings2id);
 			statementSavingsUpdate2.setDouble(1, savingsBalance2 + amount);
