@@ -345,7 +345,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			ResultSet resultFromCheckingGet = statementGetChecking.executeQuery();
 			double checkingBalance = 0;
 			while (resultFromCheckingGet.next()) {
-				checkingBalance = resultFromCheckingGet.getInt("checking_balance");
+				checkingBalance = resultFromCheckingGet.getDouble("checking_balance");
 			}
 		
 			statementCheckingUpdate.setInt(2, checkingID);
@@ -359,8 +359,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			ResultSet resultFromSavingsGet = statementGetSavings.executeQuery();
 			double savingsBalance = 0;
 			while (resultFromSavingsGet.next()) {
-				savingsBalance = resultFromSavingsGet.getInt("savings_balance");			
+				savingsBalance = resultFromSavingsGet.getDouble("savings_balance");			
 			}
+			
+			System.out.println("Debug: amount user entered: " + amount);
+			System.out.println("Debug: amount calculated: " + (savingsBalance + amount));
 			
 			statementSavingsUpdate.setInt(2, savingsID);
 			statementSavingsUpdate.setDouble(1, savingsBalance + amount);
@@ -390,7 +393,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			ResultSet resultFromCheckingGet = statementGetChecking.executeQuery();
 			double checkingBalance = 0;
 			while (resultFromCheckingGet.next()) {
-				checkingBalance = resultFromCheckingGet.getInt("checking_balance");
+				checkingBalance = resultFromCheckingGet.getDouble("checking_balance");
 			}
 		
 			statementCheckingUpdate.setInt(2, checkingID);
@@ -404,7 +407,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			ResultSet resultFromSavingsGet = statementGetSavings.executeQuery();
 			double savingsBalance = 0;
 			while (resultFromSavingsGet.next()) {
-				savingsBalance = resultFromSavingsGet.getInt("savings_balance");
+				savingsBalance = resultFromSavingsGet.getDouble("savings_balance");
 			}
 			
 			statementSavingsUpdate.setInt(2, savingsID);
@@ -435,7 +438,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			ResultSet resultFromCheckingGet = statementGetChecking.executeQuery();
 			double checkingBalance = 0;
 			while (resultFromCheckingGet.next()) {
-				checkingBalance = resultFromCheckingGet.getInt("checking_balance");
+				checkingBalance = resultFromCheckingGet.getDouble("checking_balance");
 			}
 		
 			statementCheckingUpdate.setInt(2, checkingID);
@@ -449,7 +452,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			ResultSet resultFromCheckingGet2 = statementGetChecking2.executeQuery();
 			double checkingBalance2 = 0;
 			while (resultFromCheckingGet2.next()) {
-				checkingBalance2 = resultFromCheckingGet2.getInt("checking_balance");
+				checkingBalance2 = resultFromCheckingGet2.getDouble("checking_balance");
 			}
 			
 			statementChecking2Update.setInt(2, checking2id);
@@ -479,7 +482,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			ResultSet resultFromSavingsGet = statementGetSavings.executeQuery();
 			double savingsBalance = 0;
 			while (resultFromSavingsGet.next()) {
-				savingsBalance = resultFromSavingsGet.getInt("savings_balance");
+				savingsBalance = resultFromSavingsGet.getDouble("savings_balance");
 			}
 		
 			statementSavingsUpdate.setInt(2, savingsID);
@@ -493,7 +496,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 			ResultSet resultFromSavingsGet2 = statementGetSavings2.executeQuery();
 			double savingsBalance2 = 0;
 			while (resultFromSavingsGet2.next()) {
-				savingsBalance2 = resultFromSavingsGet2.getInt("savings_balance");
+				savingsBalance2 = resultFromSavingsGet2.getDouble("savings_balance");
 			}
 //			System.out.println("Debug from EmployeeDAO, amount is: " + (amount));
 //			System.out.println("Debug from EmployeeDAO, savingsBalance2 is: " + (savingsBalance2));
