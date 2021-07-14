@@ -111,6 +111,7 @@ public class AccountService {
 
 						if (customer.getCheckingAccounts().get(selectCheckingAccount).isCheckingAccountStatus() == false) {
 							System.out.println("This account is not approved yet. Please come back later...");
+							editBalance(customer);
 						} else {
 							System.out.println("You Selected Checking Account " + customer.getCheckingAccounts().get(selectCheckingAccount).getCheckingAccountID());
 							System.out.println("1. Withdraw \n2. Deposit");
@@ -187,6 +188,7 @@ public class AccountService {
 
 						if (customer.getSavingsAccounts().get(selectSavingsAccount).isSavingsAccountStatus() == false) {
 							System.out.println("This account is not approved yet. Please come back later...");
+							editBalance(customer);
 						} else {
 							System.out.println("You Selected Savings Account " + customer.getSavingsAccounts().get(selectSavingsAccount).getSavingsAccountID());
 							System.out.println("1. Withdraw \n2. Deposit");
@@ -279,6 +281,7 @@ public class AccountService {
 
 						if (employee.getCheckingAccounts().get(selectCheckingAccount).isCheckingAccountStatus() == false) {
 							System.out.println("This account is not approved yet. Please come back later...");
+							editBalance(employee);
 						} else {
 							System.out.println("You Selected Checking Account " + employee.getCheckingAccounts().get(selectCheckingAccount).getCheckingAccountID());
 							System.out.println("1. Withdraw \n2. Deposit");
@@ -338,6 +341,7 @@ public class AccountService {
 					for (int i=0; i< employee.getSavingsAccounts().size(); i++) {
 						if (employee.getSavingsAccounts().get(i).isSavingsAccountStatus() == false) {
 							System.out.println("Pick ++> " + i + " <++ Your Savings account ID " + employee.getSavingsAccounts().get(i).getSavingsAccountID() + " is not approved yet");
+							editBalance(employee);
 						} else {
 							System.out.println("Pick ++> " + i + " <++ Your Savings account ID "
 									+ employee.getSavingsAccounts().get(i).getSavingsAccountID() 
